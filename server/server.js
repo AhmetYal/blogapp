@@ -19,11 +19,12 @@ const typeDefs = gql`
 
   type Query {
     makalelerGetir: [Makale]!
-    makaleGetir(id: ID!): Makale!
+    makaleGetir(id: ID): Makale!
   }
 
   type Mutation {
     makaleOlustur(baslik: String!, icerik: String!): Makale!
+    makaleSil(id: ID!): String!
   }
 `;
 
@@ -54,6 +55,13 @@ const resolvers = {
       } catch (error) {
         throw new error();
       }
+    },
+    makaleSil: async (_, { id }) => {
+      try {
+        const silenecek = await MakaleModel.findById(id);
+        await silenecek.delete();
+        return "silindi";
+      } catch (error) {}
     },
   },
 };
